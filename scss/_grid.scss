@@ -1,0 +1,154 @@
+/////////////////
+// Grid created by Bart Burg based on Semantic
+/////////////////
+///////////
+// Imports
+///////////
+@import 'grid-settings';
+//////////
+// GRID //
+//////////
+// Utility function — you should never need to modify this
+@function gridsystem-width($columns:$columns) {
+    @return ($column-width * $columns) + ($gutter-width * $columns);
+}
+
+// The micro clearfix http://nicolasgallagher.com/micro-clearfix-hack/
+@mixin clearfix() {
+    *zoom: 1;
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+body {
+    @include clearfix();
+}
+
+@mixin row($columns:$columns, $gutter-width: $gutter-width) {
+    display: block;
+    width: $total-width*(($gutter-width + gridsystem-width($columns))/gridsystem-width($columns));
+    margin: 0 $total-width*((($gutter-width*.5)/gridsystem-width($columns))*-1);
+    // *width: $total-width*(($gutter-width + gridsystem-width($columns))/gridsystem-width($columns))-$correction;
+    // *margin: 0 $total-width*((($gutter-width*.5)/gridsystem-width($columns))*-1)-$correction;
+    @include clearfix();
+}
+
+@mixin column($x, $columns:$columns, $gutter-width: $gutter-width) {
+    display: inline;
+    float: left;
+    width: $total-width*(((($gutter-width+$column-width)*$x)-$gutter-width) / gridsystem-width($columns));
+    margin: 0 $total-width*(($gutter-width*.5)/gridsystem-width($columns));
+}
+
+@mixin push($offset:1, $columns:$columns, $gutter-width: $gutter-width) {
+    margin-left: $total-width*((($gutter-width+$column-width)*$offset) / gridsystem-width($columns)) + $total-width*(($gutter-width*.5)/gridsystem-width($columns));
+}
+
+@mixin pull($offset:1, $columns:$columns, $gutter-width: $gutter-width) {
+    margin-right: $total-width*((($gutter-width+$column-width)*$offset) / gridsystem-width($columns)) + $total-width*(($gutter-width*.5)/gridsystem-width($columns));
+}
+
+@mixin center() {
+    max-width: $max-width;
+    @if $responsive==false and $adaptive==false and $fluid==false {
+        min-width: $max-width;
+    }
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+//////////////////////
+// GENERATE CLASSES //
+//////////////////////
+@mixin generate-with-prepend($prepend) {
+    @for $i from 1 through $columns {
+        .col-#{$i}-#{$prepend} {
+            @include column($i);
+        }
+    }
+}
+
+@mixin generate-grid {
+    body {
+        @if $responsive==true or $adaptive==true or $fluid==true {
+            width: 100%;
+        }
+        @else {
+            float: left;
+            min-width: 100%;
+        }
+    }
+    // center the contents
+    .center {
+        @include center();
+    }
+    @for $i from 1 through $columns {
+        .col-#{$i} {
+            @include column($i);
+        }
+    }
+    @if $responsive==true or $adaptive==true {
+        @media screen and (max-width: $md) {
+            .#{$name-mobile}-hide {
+                display: none !important;
+            }
+            .#{$name-mobile}-show {
+                display: block;
+            }
+            @if $responsive==false and $adaptive==true {
+                .center {
+                    max-width: $sm;
+                }
+            }
+            @include generate-with-prepend($name-mobile);
+        }
+        @media screen and (min-width: $md) and (max-width: $lg) {
+            .#{$name-tablet}-hide {
+                display: none !important;
+            }
+            .#{$name-tablet}-show {
+                display: block;
+            }
+            @if $responsive==false and $adaptive==true {
+                .center {
+                    max-width: $md;
+                }
+            }
+            @include generate-with-prepend($name-tablet);
+        }
+        @media screen and (min-width: $lg) and (max-width: $xl) {
+            .#{$name-desktop}-hide {
+                display: none !important;
+            }
+            .#{$name-desktop}-show {
+                display: block;
+            }
+            @if $responsive==false and $adaptive==true {
+                .center {
+                    max-width: $lg;
+                }
+            }
+            @include generate-with-prepend($name-desktop);
+        }
+        @media screen and (min-width: $xl) {
+            .#{$name-large-desktop}-hide {
+                display: none !important;
+            }
+            .#{$name-large-desktop}-show {
+                display: block;
+            }
+            @if $responsive==false and $adaptive==true {
+                .center {
+                    max-width: $xl;
+                }
+            }
+            @include generate-with-prepend($name-large-desktop);
+        }
+    }
+}

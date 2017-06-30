@@ -1,0 +1,30 @@
+//////////////
+// SETTINGS //
+//////////////
+$columns: 48; // This can be any number
+$max-width: 1062px; // Max width of the .center container
+$gutter-width: 0px; // 0 means no gutter, you can still use padding
+$total-width: 100%; // Advice is not to change this one
+$column-width: 60px; // Advice is not to use column-width
+$name-mobile: sm;
+$name-tablet: md;
+$name-desktop: lg;
+$name-large-desktop: xl;
+//////////////
+// System
+//////////////
+// All false means fixed
+$responsive: true;
+$adaptive: false;
+$fluid: false;
+//////////////
+//	Breakpoints
+//////////////
+$sm: 320px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+//////////////
+// additional settings
+//////////////
+// $total-width: gridsystem-width($columns); // < for calculated width, then dont use center
